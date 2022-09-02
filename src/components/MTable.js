@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import './index.css'
 import { BrowserRouter as Router, Route, Routes,Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import {useState,useEffect} from 'react'
@@ -16,7 +17,7 @@ import {
     Typography,
 
  } from '@material-ui/core';
-import EmpDet from './empDet';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
     tableContainer: {
         borderRadius: 15,
         margin: '10px 10px',
-        maxWidth: '90vw'
+        marginLeft:'10vw',
+        maxWidth: '80vw'
     },
     tableHeaderCell: {
         fontWeight: 'bold',
@@ -71,13 +73,17 @@ function MTable() {
 
   return (
     <>
-     <input
-      style={{ width: "30%", height: "25px" }}
-      type="text"
-      id="inp"
-      placeholder="Search..."
-      onChange={(e) => setSearchTitle(e.target.value)}
+    <div className='search-container'>
+    <input type="text" 
+    name="search" 
+    placeholder="Enter Name...." 
+    className="search-input" 
+    onChange={(e) => setSearchTitle(e.target.value)}
     />
+       </div>
+       <div >
+    <Link to ='/tree'><p style={{fontSize:"2rem",textAlign:"right",paddingRight:"1rem"}}>Tree-View</p></Link>
+    </div>
     <TableContainer component={Paper} className={classes.tableContainer}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
@@ -92,7 +98,16 @@ function MTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {data.filter((value) => {
+            if (searchTitle === "") {
+              return value;
+            } else if (
+              value.first_name.toLowerCase().includes(searchTitle.toLowerCase())
+            ) {
+              return value;
+            }
+          })
+          .map((row) => (
             <TableRow key={row.name}>
               <div style={{display:"none"}}>
               {s="/emp/"+row.first_name.toLowerCase()}</div>
